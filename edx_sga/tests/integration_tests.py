@@ -773,8 +773,12 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         ):
             assert block.student_state()['solution'] == ('A solution' if is_answer_available else '')
 
-    @data(True, False)
-    def test_replace_url(self, has_static_asset_path):
+    @data(
+        (True, '/static/a/different/static/asset/path'),
+        (False, '/c4x/foo/bar/asset')
+    )
+    @unpack
+    def test_replace_url(self, has_static_asset_path, path):
         """
         If the static asset path is set on a course, it should be substituted when the course is rendered
         """
@@ -790,9 +794,7 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
             showanswer=ShowAnswer.ALWAYS,
         )
         solution = block.student_state()['solution']
-        assert '<a href="{}/test.pdf">A PDF</a>'.format(
-            static_asset_path if has_static_asset_path else '/c4x/foo/bar/asset'
-        ) == solution
+        assert '<a href="{}/test.pdf">A PDF</a>'.format(path) == solution
 
     def test_base_asset_url(self):
         """
