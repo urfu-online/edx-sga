@@ -119,7 +119,7 @@ class StaffGradedAssignmentMockedTests(TempfileMixin):
             """mock imported object if not it is not available"""
             try:
                 return real_import(name, *args, **kwargs)
-            except ImportError:
+            except (ImportError, KeyError):
                 for module in ('courseware', 'lms', 'student', 'xmodule'):
                     if name.startswith("{}.".format(module)) or name == module:
                         return mock.Mock()
