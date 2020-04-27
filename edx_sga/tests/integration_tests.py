@@ -492,8 +492,8 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         """
         block = self.make_one()
         students_info = [
-            ['fred2', 'test_fred.txt', 'student 1'],
-            ['foo2', 'test_foo.txt', 'student 2']
+            ['fred2', 'test_fred.txt', b'student 1'],
+            ['foo2', 'test_foo.txt', b'student 2']
         ]
         students = []
         for student_name, filename, text in students_info:
@@ -526,8 +526,8 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         students = []
         block = self.make_one()
         students_info = [
-            ['fred2', 'test_fred.txt', 'student 1'],
-            ['foo2', 'test_foo.txt', 'student 2']
+            ['fred2', 'test_fred.txt', b'student 1'],
+            ['foo2', 'test_foo.txt', b'student 2']
         ]
         for student_name, filename, text in students_info:
             student = self.make_student(block, student_name)
