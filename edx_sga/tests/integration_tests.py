@@ -918,7 +918,7 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         solution_element = '<solution>{}</solution>'.format(solution_element) if solution_element else ''
 
         return (
-            """<vertical display_name="SGA Unit">
+            b"""<vertical display_name="SGA Unit">
               <edx_sga url_name="edx_sga" xblock-family="xblock.v1" display_name="SGA Test 1" {solution_attribute}>
                 {solution_element}
               </edx_sga>
@@ -939,7 +939,7 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         xml_dir = os.path.join(temp_dir, "xml")
         shutil.copytree(input_dir, xml_dir)
 
-        with open(os.path.join(xml_dir, "2017_SGA", "vertical", "vertical.xml"), "w") as f:
+        with open(os.path.join(xml_dir, "2017_SGA", "vertical", "vertical.xml"), "wb") as f:
             f.write(self.make_test_vertical(solution_attribute, solution_element))
 
         store = modulestore()
@@ -984,7 +984,7 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         store = modulestore()
         export_course_to_xml(store, None, course.id, temp_dir, "2017_SGA")
 
-        with open(os.path.join(temp_dir, "2017_SGA", "vertical", "vertical.xml")) as f:
+        with open(os.path.join(temp_dir, "2017_SGA", "vertical", "vertical.xml"), "rb") as f:
             content = f.read()
 
         # If both are true the expected output should only have the attribute, since it took precedence
