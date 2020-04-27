@@ -918,12 +918,12 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
         solution_element = '<solution>{}</solution>'.format(solution_element) if solution_element else ''
 
         return (
-            b"""<vertical display_name="SGA Unit">
+            """<vertical display_name="SGA Unit">
               <edx_sga url_name="edx_sga" xblock-family="xblock.v1" display_name="SGA Test 1" {solution_attribute}>
                 {solution_element}
               </edx_sga>
             </vertical>""".format(solution_attribute=solution_attribute, solution_element=solution_element)
-        )
+        ).encode()
 
     def import_test_course(self, solution_attribute=None, solution_element=None):
         """
