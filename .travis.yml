@@ -8,7 +8,7 @@ matrix:
       - (cd devstack; sed -i 's/:cached//g' ./docker-compose-host.yml)
       - (cd devstack; make dev.clone)
       python:
-        - "3.8"
+        - "3.5"
       script: >
         cd devstack;
         DEVSTACK_WORKSPACE=$PWD/.. docker-compose
