@@ -349,14 +349,14 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
             block.save_sga(mock.Mock(method="POST", body=json.dumps({
                 "display_name": "Test Block",
                 "points": '100',
-                "weight": -10.0})))
+                "weight": -10.0}).encode()))
             self.assertEqual(block.weight, orig_weight)
 
             # Test string weight doesn't work
             block.save_sga(mock.Mock(method="POST", body=json.dumps({
                 "display_name": "Test Block",
                 "points": '100',
-                "weight": "a"})))
+                "weight": "a"}).encode()))
             self.assertEqual(block.weight, orig_weight)
 
         def point_positive_int_test():
@@ -367,26 +367,26 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
             block.save_sga(mock.Mock(method="POST", body=json.dumps({
                 "display_name": "Test Block",
                 "points": '-10',
-                "weight": 11})))
+                "weight": 11}).encode()))
             self.assertEqual(block.points, orig_score)
 
             # Test float doesn't work
             block.save_sga(mock.Mock(method="POST", body=json.dumps({
                 "display_name": "Test Block",
                 "points": '24.5',
-                "weight": 11})))
+                "weight": 11}).encode()))
             self.assertEqual(block.points, orig_score)
 
         orig_score = 23
         block = self.make_one()
-        block.save_sga(mock.Mock(body='{}'))
+        block.save_sga(mock.Mock(body='{}'.encode()))
         self.assertEqual(block.display_name, "Staff Graded Assignment")
         self.assertEqual(block.points, 100)
         self.assertEqual(block.weight, None)
         block.save_sga(mock.Mock(method="POST", body=json.dumps({
             "display_name": "Test Block",
             "points": str(orig_score),
-            "weight": 11})))
+            "weight": 11}).encode()))
         self.assertEqual(block.display_name, "Test Block")
         self.assertEqual(block.points, orig_score)
         self.assertEqual(block.weight, 11)
