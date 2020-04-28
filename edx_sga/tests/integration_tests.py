@@ -919,7 +919,7 @@ class StaffGradedAssignmentXblockTests(TempfileMixin, ModuleStoreTestCase):
 
         return (
             """<vertical display_name="SGA Unit">
-              <edx_sga url_name="edx_sga" xblock-family="xblock.v1" display_name="SGA Test 1" {solution_attribute}>
+              <edx_sga url_name="edx_sga" xblock-family="xblock.v1" {solution_attribute} display_name="SGA Test 1">
                 {solution_element}
               </edx_sga>
             </vertical>""".format(solution_attribute=solution_attribute, solution_element=solution_element)
