@@ -10,13 +10,13 @@ import os
 from contextlib import closing
 from zipfile import ZipFile
 
+import pkg_resources
+import pytz
+import six
 import six.moves.urllib.error
 import six.moves.urllib.parse
 import six.moves.urllib.request
-import six
-
-import pkg_resources
-import pytz
+from common.djangoapps.student.models import user_by_anonymous_id
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
@@ -25,21 +25,6 @@ from django.template import Context, Template
 from django.utils.encoding import force_text
 from django.utils.timezone import now as django_now
 from django.utils.translation import gettext as _
-from lms.djangoapps.courseware.models import StudentModule
-from safe_lxml import etree
-from common.djangoapps.student.models import user_by_anonymous_id
-from submissions import api as submissions_api
-from submissions.models import StudentItem as SubmissionsStudent
-from submissions.models import Submission
-from webob.response import Response
-from xblock.core import XBlock
-from xblock.exceptions import JsonHandlerError
-from xblock.fields import DateTime, Float, Integer, Scope, String
-from web_fragments.fragment import Fragment
-from xblockutils.studio_editable import StudioEditableXBlockMixin
-from xmodule.contentstore.content import StaticContent
-from xmodule.util.duedate import get_extended_due_date
-
 from edx_sga.constants import ITEM_TYPE
 from edx_sga.showanswer import ShowAnswerXBlockMixin
 from edx_sga.tasks import get_zip_file_name, get_zip_file_path, zip_student_submissions
@@ -51,6 +36,19 @@ from edx_sga.utils import (
     is_finalized_submission,
     utcnow,
 )
+from lms.djangoapps.courseware.models import StudentModule
+from safe_lxml import etree
+from submissions import api as submissions_api
+from submissions.models import StudentItem as SubmissionsStudent
+from submissions.models import Submission
+from web_fragments.fragment import Fragment
+from webob.response import Response
+from xblock.core import XBlock
+from xblock.exceptions import JsonHandlerError
+from xblock.fields import DateTime, Float, Integer, Scope, String
+from xblockutils.studio_editable import StudioEditableXBlockMixin
+from xmodule.contentstore.content import StaticContent
+from xmodule.util.duedate import get_extended_due_date
 
 log = logging.getLogger(__name__)
 
@@ -83,7 +81,7 @@ class StaffGradedAssignmentXBlock(
 
     has_score = True
     icon_class = "problem"
-    STUDENT_FILEUPLOAD_MAX_SIZE = 4 * 1000 * 1000  # 4 MB
+    STUDENT_FILEUPLOAD_MAX_SIZE = 10 * 1024 * 1024  # 4 MB
     editable_fields = ("display_name", "points", "weight", "showanswer", "solution")
 
     display_name = String(
@@ -200,12 +198,12 @@ class StaffGradedAssignmentXBlock(
         """
         Override default serialization to output solution field as a separate child element.
         """
-        super().add_xml_to_node(node)
+        super(StaffGradedAssignmentXBlock, self).add_xml_to_node(node)
 
         if "solution" in node.attrib:
             # Try outputting it as an XML element if we can
             solution = node.attrib["solution"]
-            wrapped = f"<solution>{solution}</solution>"
+            wrapped = "<solution>{}</solution>".format(solution)
             try:
                 child = etree.fromstring(wrapped)
             except:  # pylint: disable=bare-except
@@ -260,10 +258,11 @@ class StaffGradedAssignmentXBlock(
         upload = request.params["assignment"]
         sha1 = get_sha1(upload.file)
         if self.file_size_over_limit(upload.file):
-            size=self.student_upload_max_size()
+            size = self.student_upload_max_size()
             raise JsonHandlerError(
-                413,
-                f"Unable to upload file. Max size limit is {size}"
+                413, 'Unable to upload file. Max size limit is {size}'.format(
+                    size=self.student_upload_max_size()
+                )
             )
         # Uploading an assignment represents a change of state with this user in this block,
         # so we need to ensure that the user has a StudentModule record, which represents that state.
@@ -316,10 +315,11 @@ class StaffGradedAssignmentXBlock(
         upload = request.params["annotated"]
         sha1 = get_sha1(upload.file)
         if self.file_size_over_limit(upload.file):
-            size=self.student_upload_max_size()
+            size = self.student_upload_max_size()
             raise JsonHandlerError(
-                413,
-                f"Unable to upload file. Max size limit is {size}"
+                413, 'Unable to upload file. Max size limit is {size}'.format(
+                    size=self.student_upload_max_size()
+                )
             )
         module = self.get_student_module(request.params["module_id"])
         state = json.loads(module.state)
@@ -476,7 +476,7 @@ class StaffGradedAssignmentXBlock(
 
     @XBlock.handler
     def prepare_download_submissions(
-        self, request, suffix=""
+            self, request, suffix=""
     ):  # pylint: disable=unused-argument
         """
         Runs a async task that collects submissions in background and zip them.
@@ -531,7 +531,7 @@ class StaffGradedAssignmentXBlock(
 
     @XBlock.handler
     def download_submissions(
-        self, request, suffix=""
+            self, request, suffix=""
     ):  # pylint: disable=unused-argument
         """
         Api for downloading zip file which consist of all students submissions.
@@ -555,13 +555,13 @@ class StaffGradedAssignmentXBlock(
         except OSError:
             return Response(
                 "Sorry, submissions cannot be found. Press Collect ALL Submissions button or"
-                f" contact {settings.TECH_SUPPORT_EMAIL} if you issue is consistent",
-                status_code=404,
+                " contact {} if you issue is consistent".format(settings.TECH_SUPPORT_EMAIL),
+                status_code=404
             )
 
     @XBlock.handler
     def download_submissions_status(
-        self, request, suffix=""
+            self, request, suffix=""
     ):  # pylint: disable=unused-argument
         """
         returns True if zip file is available for download
@@ -602,7 +602,7 @@ class StaffGradedAssignmentXBlock(
         Render a form for editing this XBlock
         """
         # this method only exists to provide context=None for backwards compat
-        return super().studio_view(context)
+        return super(StaffGradedAssignmentXBlock, self).studio_view(context)
 
     def clear_student_state(self, *args, **kwargs):
         # pylint: disable=unused-argument
@@ -614,7 +614,7 @@ class StaffGradedAssignmentXBlock(
         """
         student_id = kwargs["user_id"]
         for submission in submissions_api.get_submissions(
-            self.get_student_item_dict(student_id)
+                self.get_student_item_dict(student_id)
         ):
             submission_file_sha1 = submission["answer"].get("sha1")
             submission_filename = submission["answer"].get("filename")
@@ -855,7 +855,7 @@ class StaffGradedAssignmentXBlock(
                         "submission_id": submission["uuid"],
                         "filename": submission["answer"]["filename"],
                         "timestamp": submission["submitted_at"]
-                        or submission["created_at"],
+                                     or submission["created_at"],
                     }
                 )
 
@@ -880,19 +880,21 @@ class StaffGradedAssignmentXBlock(
         except OSError:
             if require_staff:
                 return Response(
-                    f"Sorry, assignment {filename.encode('utf-8')} cannot be found at"
-                    f" {path}. Please contact {settings.TECH_SUPPORT_EMAIL}",
-                    status_code=404,
+                    "Sorry, assignment {} cannot be found at"
+                    " {}. Please contact {}".format(
+                        filename.encode('utf-8'), path, settings.TECH_SUPPORT_EMAIL
+                    ),
+                    status_code=404
                 )
             return Response(
-                f"Sorry, the file you uploaded, {filename.encode('utf-8')}, cannot be"
+                "Sorry, the file you uploaded, {}, cannot be"
                 " found. Please try uploading it again or contact"
-                " course staff",
-                status_code=404,
+                " course staff".format(filename.encode('utf-8')),
+                status_code=404
             )
 
     def validate_score_message(
-        self, course_id, username
+            self, course_id, username
     ):  # lint-amnesty, pylint: disable=missing-function-docstring
         # pylint: disable=no-member
         log.error(
@@ -953,9 +955,9 @@ class StaffGradedAssignmentXBlock(
             submission_data if submission_data is not None else self.get_submission()
         )
         return (
-            not self.past_due()
-            and self.score is None
-            and not is_finalized_submission(submission_data)
+                not self.past_due()
+                and self.score is None
+                and not is_finalized_submission(submission_data)
         )
 
     def file_storage_path(self, file_hash, original_filename):

@@ -6,14 +6,13 @@ import os
 import tempfile
 import zipfile
 
-from django.core.files.storage import default_storage
 from celery import shared_task
-from opaque_keys.edx.locator import BlockUsageLocator
 from common.djangoapps.student.models import user_by_anonymous_id
-from submissions import api as submissions_api
-
+from django.core.files.storage import default_storage
 from edx_sga.constants import ITEM_TYPE
 from edx_sga.utils import get_file_storage_path, is_finalized_submission
+from opaque_keys.edx.locator import BlockUsageLocator
+from submissions import api as submissions_api
 
 log = logging.getLogger(__name__)
 
@@ -74,9 +73,9 @@ def _compress_student_submissions(zip_file_path, block_id, course_id, locator):
                     submission_file_path,
                 )
                 with default_storage.open(
-                    submission_file_path, "rb"
+                        submission_file_path, "rb"
                 ) as destination_file:
-                    filename_in_zip = f"{student_username}_{os.path.basename(submission_file_path)}"
+                    filename_in_zip = "{student_username}_{basename_filepath}".format(student_username=student_username, basename_filepath=os.path.basename(submission_file_path))
                     zip_pointer.writestr(filename_in_zip, destination_file.read())
         # Reset file pointer
         tmp.seek(0)
@@ -125,8 +124,8 @@ def get_zip_file_name(username, course_id, block_id):
         course_id (unicode): edx course id
         block_id (unicode): edx block id
     """
-    _id=hashlib.md5(block_id.encode("utf-8")).hexdigest()
-    return f"{username}_submissions_{_id}_{course_id}.zip"
+    _id = hashlib.md5(block_id.encode("utf-8")).hexdigest()
+    return "{username}_submissions_{_id}_{course_id}.zip".format(username=username, _id=_id, course_id=course_id)
 
 
 def get_zip_file_path(username, course_id, block_id, locator):
