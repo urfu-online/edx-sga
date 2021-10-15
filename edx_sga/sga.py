@@ -908,7 +908,7 @@ class StaffGradedAssignmentXBlock(
         """
         Check if user is course staff.
         """
-        return is_instructor(self)  # getattr(self.xmodule_runtime, "user_is_staff", False)
+        return self.is_instructor()  # getattr(self.xmodule_runtime, "user_is_staff", False)
 
     def is_instructor(self):
         # pylint: disable=no-member
