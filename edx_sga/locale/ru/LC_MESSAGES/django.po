@@ -284,11 +284,6 @@ msgstr "Комментарий:"
 msgid "Submit"
 msgstr "Отправить"
 
-#: edx_sga/templates/staff_graded_assignment/show.html:203
-#: venv/lib/python2.7/site-packages/xblockutils/templates/studio_edit.html:110
-msgid "Cancel"
-msgstr "Отмена"
-
 #: edx_sga/templates/staff_graded_assignment/show.html:206
 msgid "Remove grade"
 msgstr "Удалить оценку"
