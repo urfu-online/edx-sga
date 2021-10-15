@@ -24,9 +24,9 @@ msgstr ""
 msgid "Display Name"
 msgstr "Отображаемое имя"
 
-#: edx_sga/sga.py:89 edx_sga/templates/staff_graded_assignment/show.html:149
+#: edx_sga/sga.py:89
 msgid "Staff Graded Assignment"
-msgstr "Оценивание персоналом"
+msgstr ""
 
 #: edx_sga/sga.py:92
 msgid "This name appears in the horizontal navigation at the top of the page."
