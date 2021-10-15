@@ -7,7 +7,7 @@ import tempfile
 import zipfile
 
 from celery import shared_task
-from common.djangoapps.student.models import user_by_anonymous_id
+from student.models import user_by_anonymous_id
 from django.core.files.storage import default_storage
 from edx_sga.constants import ITEM_TYPE
 from edx_sga.utils import get_file_storage_path, is_finalized_submission

@@ -16,7 +16,7 @@ import six
 import six.moves.urllib.error
 import six.moves.urllib.parse
 import six.moves.urllib.request
-from common.djangoapps.student.models import user_by_anonymous_id
+from student.models import user_by_anonymous_id
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
 from django.core.files import File
@@ -36,7 +36,7 @@ from edx_sga.utils import (
     is_finalized_submission,
     utcnow,
 )
-from lms.djangoapps.courseware.models import StudentModule
+from courseware.models import StudentModule
 from safe_lxml import etree
 from submissions import api as submissions_api
 from submissions.models import StudentItem as SubmissionsStudent
