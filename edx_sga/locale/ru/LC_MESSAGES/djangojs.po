@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"Report-Msgid-Bugs-To: \n"
+"Report-# msgid-Bugs-To: \n"
 "POT-Creation-Date: 2017-09-12 17:09+0430\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
@@ -17,41 +17,41 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Upload %(file_name)s"
-msgstr "Загрузить %(file_name)s"
+# msgid "Upload %(file_name)s"
+# msgstr "Загрузить %(file_name)s"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Uploading..."
-msgstr "Загрузка..."
+# msgid "Uploading..."
+# msgstr "Загрузка..."
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "The file you are trying to upload is too large."
-msgstr "Выбранный файл слишком велик."
+# msgid "The file you are trying to upload is too large."
+# msgstr "Выбранный файл слишком велик."
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "There was an error uploading your file."
-msgstr "Возникла ошибка при зашрузке файла."
+# msgid "There was an error uploading your file."
+# msgstr "Возникла ошибка при зашрузке файла."
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Uploading... %(percent)s %"
-msgstr "Загрузка... %(percent)s %"
+# msgid "Uploading... %(percent)s %"
+# msgstr "Загрузка... %(percent)s %"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Grade must be a number."
-msgstr "Оценка должна быть числом."
+# msgid "Grade must be a number."
+# msgstr "Оценка должна быть числом."
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Grade must be an integer."
-msgstr "Оценка должна быть целым числом"
+# msgid "Grade must be an integer."
+# msgstr "Оценка должна быть целым числом"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Grade must be positive."
-msgstr "Оценка должна быть положительным числом"
+# msgid "Grade must be positive."
+# msgstr "Оценка должна быть положительным числом"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "Maximum score is %(max_score)s"
-msgstr "Максимальный балл - %(max_score)s"
+# msgid "Maximum score is %(max_score)s"
+# msgstr "Максимальный балл - %(max_score)s"
 
 #: edx_sga/static/js/src/edx_sga.js
-msgid "No grade to remove."
-msgstr "Нет оценки для удаления."
+# msgid "No grade to remove."
+# msgstr "Нет оценки для удаления."
