@@ -812,9 +812,7 @@ class StaffGradedAssignmentXBlock(
                 approved = score is not None
                 if score is None:
                     score = state.get("staff_score")
-                    needs_approval = score is not None
-                else:
-                    needs_approval = False
+                needs_approval = False
                 instructor = self.is_instructor()
                 yield {
                     "module_id": student_module.id,
