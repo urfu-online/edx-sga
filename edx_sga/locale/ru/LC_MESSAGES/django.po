@@ -160,7 +160,7 @@ msgstr "Загрузить другой файл"
 
 #: edx_sga/templates/staff_graded_assignment/show.html:18
 msgid "Upload your assignment"
-msgstr "Загрузите свое задание"
+msgstr "Загрузите свой ответ"
 
 #: edx_sga/templates/staff_graded_assignment/show.html:27
 msgid "File uploaded"
